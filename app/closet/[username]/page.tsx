@@ -121,7 +121,7 @@ export default async function ClosetPage({ params }: { params: { username: strin
               </p>
             </div>
           ) : (
-            <ClosetItemGrid items={closetItems} />
+            <ClosetItemGrid items={closetItems} username={username} />
           )}
         </div>
 

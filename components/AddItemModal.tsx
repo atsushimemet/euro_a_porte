@@ -15,7 +15,9 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
     description: '',
     imageUrl: '',
     category: '',
-    tags: [] as string[]
+    tags: [] as string[],
+    favoritePoints: '',
+    isPublic: true
   })
   const [newTag, setNewTag] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -199,6 +201,21 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
               <p className="text-xs text-primary-500 mt-1">
                 例: リネン、ブラウス、フランス、ヴィンテージ
               </p>
+            </div>
+
+            {/* お気に入りポイント */}
+            <div>
+              <label htmlFor="favoritePoints" className="block text-sm font-medium text-primary-700 mb-2">
+                お気に入りポイント
+              </label>
+              <textarea
+                id="favoritePoints"
+                value={formData.favoritePoints}
+                onChange={(e) => setFormData({ ...formData, favoritePoints: e.target.value })}
+                rows={4}
+                className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+                placeholder="このアイテムのお気に入りポイントや思い出、着こなしのコツなどを自由に書いてください..."
+              />
             </div>
 
             {/* プレビュー */}

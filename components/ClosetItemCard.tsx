@@ -1,6 +1,7 @@
 'use client'
 
 import { Edit, Eye, EyeOff, MoreVertical, Trash2 } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 import ImageWithFallback from './ImageWithFallback'
 
@@ -84,7 +85,10 @@ export default function ClosetItemCard({ item, viewMode, onUpdate }: ClosetItemC
               </h3>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={handleToggleVisibility}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleToggleVisibility()
+                  }}
                   className={`p-1 rounded ${
                     item.isPublic 
                       ? 'text-green-600 hover:text-green-700' 
@@ -96,7 +100,10 @@ export default function ClosetItemCard({ item, viewMode, onUpdate }: ClosetItemC
                 </button>
                 <div className="relative">
                   <button
-                    onClick={() => setShowMenu(!showMenu)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setShowMenu(!showMenu)
+                    }}
                     className="p-1 text-primary-400 hover:text-primary-600 rounded"
                   >
                     <MoreVertical className="w-4 h-4" />
@@ -104,18 +111,17 @@ export default function ClosetItemCard({ item, viewMode, onUpdate }: ClosetItemC
                   
                   {showMenu && (
                     <div className="absolute right-0 top-8 bg-white border border-primary-200 rounded-lg shadow-lg z-10 min-w-[120px]">
-                      <button
-                        onClick={() => {
-                          setShowMenu(false)
-                          // TODO: Implement edit functionality
-                        }}
+                      <Link
+                        href={`/dashboard/edit/${item.id}`}
                         className="w-full px-3 py-2 text-left text-sm text-primary-700 hover:bg-primary-50 flex items-center space-x-2"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Edit className="w-4 h-4" />
                         <span>編集</span>
-                      </button>
+                      </Link>
                       <button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation()
                           setShowMenu(false)
                           handleDelete()
                         }}
@@ -175,7 +181,10 @@ export default function ClosetItemCard({ item, viewMode, onUpdate }: ClosetItemC
         
         <div className="absolute top-2 right-2 flex items-center space-x-1">
           <button
-            onClick={handleToggleVisibility}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleToggleVisibility()
+            }}
             className={`p-1 rounded-full bg-white/80 backdrop-blur-sm ${
               item.isPublic 
                 ? 'text-green-600 hover:text-green-700' 
@@ -188,7 +197,10 @@ export default function ClosetItemCard({ item, viewMode, onUpdate }: ClosetItemC
           
           <div className="relative">
             <button
-              onClick={() => setShowMenu(!showMenu)}
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowMenu(!showMenu)
+              }}
               className="p-1 rounded-full bg-white/80 backdrop-blur-sm text-primary-400 hover:text-primary-600"
             >
               <MoreVertical className="w-4 h-4" />
@@ -196,18 +208,17 @@ export default function ClosetItemCard({ item, viewMode, onUpdate }: ClosetItemC
             
             {showMenu && (
               <div className="absolute right-0 top-8 bg-white border border-primary-200 rounded-lg shadow-lg z-10 min-w-[120px]">
-                <button
-                  onClick={() => {
-                    setShowMenu(false)
-                    // TODO: Implement edit functionality
-                  }}
+                <Link
+                  href={`/dashboard/edit/${item.id}`}
                   className="w-full px-3 py-2 text-left text-sm text-primary-700 hover:bg-primary-50 flex items-center space-x-2"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <Edit className="w-4 h-4" />
                   <span>編集</span>
-                </button>
+                </Link>
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation()
                     setShowMenu(false)
                     handleDelete()
                   }}

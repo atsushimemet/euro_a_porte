@@ -202,12 +202,13 @@ export default function DashboardPage() {
           ) : (
             <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'}>
               {closetItems.map((item) => (
-                <ClosetItemCard
-                  key={item.id}
-                  item={item}
-                  viewMode={viewMode}
-                  onUpdate={fetchClosetItems}
-                />
+                            <div key={item.id} className="cursor-pointer" onClick={() => window.location.href = `/dashboard/item/${item.id}`}>
+              <ClosetItemCard
+                item={item}
+                viewMode={viewMode}
+                onUpdate={fetchClosetItems}
+              />
+            </div>
               ))}
             </div>
           )}

@@ -16,15 +16,16 @@ interface ClosetItem {
 
 interface ClosetItemGridProps {
   items: ClosetItem[]
+  username?: string
 }
 
-export default function ClosetItemGrid({ items }: ClosetItemGridProps) {
+export default function ClosetItemGrid({ items, username }: ClosetItemGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {items.map((item) => (
         <Link
           key={item.id}
-          href={`/closet-item/${item.id}`}
+          href={username ? `/closet-item/${item.id}` : `/dashboard/item/${item.id}`}
           className="group"
         >
           <div className="bg-white border border-primary-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:scale-[1.02]">

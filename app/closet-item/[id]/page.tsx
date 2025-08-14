@@ -11,6 +11,7 @@ interface ClosetItem {
   imageUrl: string
   category: string
   tags: string[]
+  favoritePoints: string | null
   isPublic: boolean
   createdAt: string
   user: {
@@ -113,6 +114,18 @@ export default async function ClosetItemPage({ params }: { params: { id: string 
                 <p className="text-primary-700 leading-relaxed">
                   {item.description}
                 </p>
+              </div>
+            )}
+
+            {/* Favorite Points */}
+            {item.favoritePoints && (
+              <div>
+                <h2 className="text-xl font-semibold text-primary-800 mb-4">お気に入りポイント</h2>
+                <div className="bg-accent-50 border border-accent-200 rounded-lg p-4">
+                  <p className="text-primary-700 leading-relaxed">
+                    {item.favoritePoints}
+                  </p>
+                </div>
               </div>
             )}
 
