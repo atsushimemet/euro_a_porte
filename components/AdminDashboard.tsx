@@ -1,0 +1,347 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { LogOut, Plus, Edit, Trash2, Star } from 'lucide-react'
+import AdminItemForm from './AdminItemForm'
+
+interface Item {
+  id: string
+  name: string
+  nameEn: string
+  description: string
+  material: string
+  history?: string
+  imageUrl: string
+  stylingUrl?: string
+  category: string
+  tags: string[]
+  isStylingExample?: boolean
+}
+
+interface AdminDashboardProps {
+  onLogout: () => void
+}
+
+export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
+  const [items, setItems] = useState<Item[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [showItemForm, setShowItemForm] = useState(false)
+  const [editingItem, setEditingItem] = useState<Item | null>(null)
+  const [activeTab, setActiveTab] = useState<'items' | 'styling'>('items')
+
+  useEffect(() => {
+    fetchItems()
+  }, [])
+
+  const fetchItems = async () => {
+    try {
+      const response = await fetch('/api/items')
+      if (response.ok) {
+        const data = await response.json()
+        setItems(data)
+      }
+    } catch (error) {
+      console.error('Error fetching items:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleAddItem = async (itemData: Omit<Item, 'id'>) => {
+    try {
+      const response = await fetch('/api/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(itemData),
+      })
+
+      if (response.ok) {
+        setShowItemForm(false)
+        fetchItems()
+      }
+    } catch (error) {
+      console.error('Error adding item:', error)
+    }
+  }
+
+  const handleUpdateItem = async (id: string, itemData: Partial<Item>) => {
+    try {
+      const response = await fetch(`/api/items/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(itemData),
+      })
+
+      if (response.ok) {
+        setShowItemForm(false)
+        setEditingItem(null)
+        fetchItems()
+      }
+    } catch (error) {
+      console.error('Error updating item:', error)
+    }
+  }
+
+  const handleDeleteItem = async (id: string) => {
+    if (!confirm('このアイテムを削除しますか？')) return
+
+    try {
+      const response = await fetch(`/api/items/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        fetchItems()
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error)
+    }
+  }
+
+  const handleToggleStylingExample = async (id: string, isStylingExample: boolean) => {
+    try {
+      const response = await fetch(`/api/items/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isStylingExample }),
+      })
+
+      if (response.ok) {
+        fetchItems()
+      }
+    } catch (error) {
+      console.error('Error updating styling example status:', error)
+    }
+  }
+
+  const openItemForm = (item?: Item) => {
+    setEditingItem(item || null)
+    setShowItemForm(true)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="container-custom py-16 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-600 mx-auto"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="container-custom py-16">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-primary-800">管理者ダッシュボード</h1>
+        <button
+          onClick={onLogout}
+          className="btn-secondary flex items-center space-x-2"
+        >
+          <LogOut size={20} />
+          <span>ログアウト</span>
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex space-x-1 bg-primary-100 rounded-lg p-1 mb-8">
+        <button
+          onClick={() => setActiveTab('items')}
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            activeTab === 'items'
+              ? 'bg-white text-primary-800 shadow-sm'
+              : 'text-primary-600 hover:text-primary-800'
+          }`}
+        >
+          アイテム管理
+        </button>
+        <button
+          onClick={() => setActiveTab('styling')}
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            activeTab === 'styling'
+              ? 'bg-white text-primary-800 shadow-sm'
+              : 'text-primary-600 hover:text-primary-800'
+          }`}
+        >
+          スタイリング例設定
+        </button>
+      </div>
+
+      {activeTab === 'items' && (
+        <div>
+          {/* Add Item Button */}
+          <div className="mb-6">
+            <button
+              onClick={() => openItemForm()}
+              className="btn-primary flex items-center space-x-2"
+            >
+              <Plus size={20} />
+              <span>アイテムを追加</span>
+            </button>
+          </div>
+
+          {/* Items List */}
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-primary-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
+                      画像
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
+                      名前
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
+                      カテゴリ
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
+                      タグ
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
+                      操作
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-primary-200">
+                  {items.map((item) => (
+                    <tr key={item.id} className="hover:bg-primary-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-primary-900">
+                            {item.name}
+                          </div>
+                          <div className="text-sm text-primary-500">
+                            {item.nameEn}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-accent-100 text-accent-800">
+                          {item.category}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap gap-1">
+                          {item.tags.slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {item.tags.length > 3 && (
+                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800">
+                              +{item.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => openItemForm(item)}
+                            className="text-accent-600 hover:text-accent-900"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteItem(item.id)}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'styling' && (
+        <div>
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-primary-800 mb-2">
+              スタイリング例に表示するアイテムを選択
+            </h2>
+            <p className="text-primary-600">
+              トップページのスタイリング例に表示するアイテムを選択してください。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className={`bg-white rounded-lg shadow-lg overflow-hidden border-2 transition-colors ${
+                  item.isStylingExample
+                    ? 'border-accent-500'
+                    : 'border-transparent'
+                }`}
+              >
+                <div className="relative">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  {item.isStylingExample && (
+                    <div className="absolute top-2 right-2">
+                      <Star className="w-6 h-6 text-accent-500 fill-current" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-primary-800 mb-1">
+                    {item.name}
+                  </h3>
+                  <p className="text-sm text-primary-600 mb-3">
+                    {item.nameEn}
+                  </p>
+                  <button
+                    onClick={() => handleToggleStylingExample(item.id, !item.isStylingExample)}
+                    className={`w-full py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                      item.isStylingExample
+                        ? 'bg-accent-100 text-accent-800 hover:bg-accent-200'
+                        : 'bg-primary-100 text-primary-800 hover:bg-primary-200'
+                    }`}
+                  >
+                    {item.isStylingExample ? 'スタイリング例から削除' : 'スタイリング例に追加'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Item Form Modal */}
+      {showItemForm && (
+        <AdminItemForm
+          item={editingItem}
+          onSave={editingItem ? handleUpdateItem : handleAddItem}
+          onCancel={() => {
+            setShowItemForm(false)
+            setEditingItem(null)
+          }}
+        />
+      )}
+    </div>
+  )
+}

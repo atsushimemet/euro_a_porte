@@ -2,68 +2,43 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-// サンプルデータ（実際のInstagram APIと連携予定）
-const samplePosts = [
-  {
-    id: 1,
-    imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
-    caption: 'リネンブラウスとデニムの組み合わせ',
-    itemId: '1' // リネンブラウス
-  },
-  {
-    id: 2,
-    imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
-    caption: 'モールスキンジャケットの着こなし',
-    itemId: '2' // モールスキンジャケット
-  },
-  {
-    id: 3,
-    imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
-    caption: 'コットンシャツのシンプルスタイル',
-    itemId: '3' // コットンシャツ
-  },
-  {
-    id: 4,
-    imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop',
-    caption: 'ヴィンテージデニムの魅力',
-    itemId: '4' // ヴィンテージデニム
-  },
-  {
-    id: 5,
-    imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop',
-    caption: 'フランスのリペア文化',
-    itemId: '5' // ウールコート
-  },
-  {
-    id: 6,
-    imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&h=400&fit=crop',
-    caption: '天然素材の風合い',
-    itemId: '6' // シルクスカーフ
-  },
-  {
-    id: 7,
-    imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
-    caption: 'ユーロヴィンテージの着こなし',
-    itemId: '2' // モールスキンジャケット（重複）
-  },
-  {
-    id: 8,
-    imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
-    caption: 'シンプルな組み合わせ',
-    itemId: '3' // コットンシャツ（重複）
-  },
-  {
-    id: 9,
-    imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop',
-    caption: '長く着られる価値',
-    itemId: '4' // ヴィンテージデニム（重複）
-  }
-]
+interface StylingItem {
+  id: string
+  name: string
+  imageUrl: string
+  caption: string
+}
 
 export default function InstagramGrid() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [stylingItems, setStylingItems] = useState<StylingItem[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchStylingItems()
+  }, [])
+
+  const fetchStylingItems = async () => {
+    try {
+      const response = await fetch('/api/items?styling=true')
+      if (response.ok) {
+        const items = await response.json()
+        const stylingItems = items.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          imageUrl: item.imageUrl,
+          caption: `${item.name}の着こなし`
+        }))
+        setStylingItems(stylingItems)
+      }
+    } catch (error) {
+      console.error('Error fetching styling items:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <section className="py-16 bg-white">
@@ -78,32 +53,42 @@ export default function InstagramGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {samplePosts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/items/${post.itemId}`}
-              className="relative group cursor-pointer overflow-hidden rounded-lg block"
-              onMouseEnter={() => setHoveredId(post.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <Image
-                src={post.imageUrl}
-                alt={post.caption}
-                width={400}
-                height={400}
-                className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              
-              {/* Overlay */}
-              <div className={`absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end`}>
-                <div className="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <p className="text-sm font-medium">{post.caption}</p>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-600 mx-auto"></div>
+          </div>
+        ) : stylingItems.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {stylingItems.map((item) => (
+              <Link
+                key={item.id}
+                href={`/items/${item.id}`}
+                className="relative group cursor-pointer overflow-hidden rounded-lg block"
+                onMouseEnter={() => setHoveredId(item.id)}
+                onMouseLeave={() => setHoveredId(null)}
+              >
+                <Image
+                  src={item.imageUrl}
+                  alt={item.caption}
+                  width={400}
+                  height={400}
+                  className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                
+                {/* Overlay */}
+                <div className={`absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end`}>
+                  <div className="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <p className="text-sm font-medium">{item.caption}</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-primary-600">スタイリング例がまだ登録されていません</p>
+          </div>
+        )}
 
         <div className="text-center mt-12">
           <a

@@ -4,9 +4,15 @@ import { NextRequest, NextResponse } from 'next/server'
 const prisma = new PrismaClient()
 
 // GET: アイテム一覧取得
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const styling = searchParams.get('styling')
+
+    const where = styling === 'true' ? { isStylingExample: true } : {}
+
     const items = await prisma.item.findMany({
+      where,
       orderBy: {
         createdAt: 'desc'
       }

@@ -37,6 +37,7 @@ model Item {
   stylingUrl  String?
   category    String
   tags        String[]
+  isStylingExample Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

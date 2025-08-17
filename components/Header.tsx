@@ -12,6 +12,7 @@ export default function Header() {
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
     { name: 'Instagram', href: 'https://instagram.com', external: true },
+    { name: 'Admin', href: '/admin' },
   ]
 
   return (

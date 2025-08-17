@@ -39,12 +39,10 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    const { name, nameEn, description, material, history, imageUrl, stylingUrl, category, tags } = body
+    const { name, nameEn, description, material, history, imageUrl, stylingUrl, category, tags, isStylingExample } = body
 
     const item = await prisma.item.update({
-      where: {
-        id: params.id
-      },
+      where: { id: params.id },
       data: {
         name,
         nameEn,
@@ -54,7 +52,8 @@ export async function PUT(
         imageUrl,
         stylingUrl,
         category,
-        tags
+        tags,
+        isStylingExample
       }
     })
 
@@ -75,9 +74,7 @@ export async function DELETE(
 ) {
   try {
     await prisma.item.delete({
-      where: {
-        id: params.id
-      }
+      where: { id: params.id }
     })
 
     return NextResponse.json({ message: 'Item deleted successfully' })
