@@ -39,15 +39,13 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    const { name, nameEn, description, material, history, imageUrl, stylingUrl, category, tags, isStylingExample } = body
+    const { name, description, history, imageUrl, stylingUrl, category, tags, isStylingExample } = body
 
     const item = await prisma.item.update({
       where: { id: params.id },
       data: {
         name,
-        nameEn,
         description,
-        material,
         history,
         imageUrl,
         stylingUrl,

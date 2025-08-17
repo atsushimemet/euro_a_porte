@@ -8,9 +8,7 @@ const sampleItems = {
   '1': {
     id: '1',
     name: 'リネンブラウス',
-    nameEn: 'Linen Blouse',
     description: 'フランス産の高品質リネンを使用したブラウス。天然素材の風合いと丁寧な縫製が特徴で、長く着られる価値があります。',
-    material: 'リネン（フランス産）',
     history: 'フランスの伝統的なリネン織物技術を活かして作られたブラウス。リネンは吸湿性と通気性に優れ、夏場の着用に最適です。',
     imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop',
     stylingUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop',
@@ -20,9 +18,7 @@ const sampleItems = {
   '2': {
     id: '2',
     name: 'モールスキンジャケット',
-    nameEn: 'Moleskin Jacket',
     description: 'イタリア産のモールスキン生地を使用したジャケット。柔らかく丈夫な素材で、カジュアルからセミフォーマルまで幅広く着用できます。',
-    material: 'モールスキン（イタリア産）',
     history: 'モールスキンは元々労働者の作業着として使われていた生地で、その耐久性と快適さから現在ではファッションアイテムとしても人気があります。',
     imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop',
     stylingUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=600&fit=crop',
@@ -93,12 +89,9 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
           {/* Item Details */}
           <div className="space-y-8">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-primary-800 mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-primary-800 mb-4">
                 {item.name}
               </h1>
-              <p className="text-lg text-primary-600 font-serif mb-4">
-                {item.nameEn}
-              </p>
               <span className="bg-accent-600 text-white text-sm px-3 py-1 rounded-full">
                 {item.category}
               </span>
@@ -111,12 +104,7 @@ export default function ItemDetailPage({ params }: { params: { id: string } }) {
               </p>
             </div>
 
-            <div>
-              <h2 className="text-xl font-semibold text-primary-800 mb-4">素材</h2>
-              <p className="text-primary-700">
-                {item.material}
-              </p>
-            </div>
+
 
             {item.history && (
               <div>

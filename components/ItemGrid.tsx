@@ -8,7 +8,6 @@ const sampleItems = [
   {
     id: '1',
     name: 'リネンブラウス',
-    nameEn: 'Linen Blouse',
     category: 'トップス',
     imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
     tags: ['リネン', 'ブラウス', 'トップス', 'フランス']
@@ -16,7 +15,6 @@ const sampleItems = [
   {
     id: '2',
     name: 'モールスキンジャケット',
-    nameEn: 'Moleskin Jacket',
     category: 'アウター',
     imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
     tags: ['モールスキン', 'ジャケット', 'アウター', 'イタリア']
@@ -24,7 +22,6 @@ const sampleItems = [
   {
     id: '3',
     name: 'コットンシャツ',
-    nameEn: 'Cotton Shirt',
     category: 'トップス',
     imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
     tags: ['コットン', 'シャツ', 'トップス', 'フランス']
@@ -32,7 +29,6 @@ const sampleItems = [
   {
     id: '4',
     name: 'ヴィンテージデニム',
-    nameEn: 'Vintage Denim',
     category: 'ボトムス',
     imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop',
     tags: ['デニム', 'ジーンズ', 'ボトムス', 'アメリカ']
@@ -40,7 +36,6 @@ const sampleItems = [
   {
     id: '5',
     name: 'ウールコート',
-    nameEn: 'Wool Coat',
     category: 'アウター',
     imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop',
     tags: ['ウール', 'コート', 'アウター', 'イギリス']
@@ -48,7 +43,6 @@ const sampleItems = [
   {
     id: '6',
     name: 'シルクスカーフ',
-    nameEn: 'Silk Scarf',
     category: 'アクセサリー',
     imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&h=400&fit=crop',
     tags: ['シルク', 'スカーフ', 'アクセサリー', 'フランス']
@@ -80,12 +74,9 @@ export default function ItemGrid() {
           </div>
           
           <div className="p-6">
-            <h3 className="text-xl font-semibold text-primary-800 mb-2">
+            <h3 className="text-xl font-semibold text-primary-800 mb-4">
               {item.name}
             </h3>
-            <p className="text-sm text-primary-600 mb-4 font-serif">
-              {item.nameEn}
-            </p>
             
             <div className="flex flex-wrap gap-2">
               {item.tags.map((tag) => (

@@ -1,15 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { LogOut, Plus, Edit, Trash2, Star } from 'lucide-react'
+import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import AdminItemForm from './AdminItemForm'
 
 interface Item {
   id: string
   name: string
-  nameEn: string
   description: string
-  material: string
   history?: string
   imageUrl: string
   stylingUrl?: string
@@ -218,13 +216,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-primary-900">
-                            {item.name}
-                          </div>
-                          <div className="text-sm text-primary-500">
-                            {item.nameEn}
-                          </div>
+                        <div className="text-sm font-medium text-primary-900">
+                          {item.name}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -308,12 +301,9 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   )}
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-primary-800 mb-1">
+                  <h3 className="font-semibold text-primary-800 mb-3">
                     {item.name}
                   </h3>
-                  <p className="text-sm text-primary-600 mb-3">
-                    {item.nameEn}
-                  </p>
                   <button
                     onClick={() => handleToggleStylingExample(item.id, !item.isStylingExample)}
                     className={`w-full py-2 px-4 rounded-md text-sm font-medium transition-colors ${

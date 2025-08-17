@@ -1,14 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 interface Item {
   id: string
   name: string
-  nameEn: string
   description: string
-  material: string
   history?: string
   imageUrl: string
   stylingUrl?: string
@@ -25,9 +23,7 @@ interface AdminItemFormProps {
 export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormProps) {
   const [formData, setFormData] = useState({
     name: '',
-    nameEn: '',
     description: '',
-    material: '',
     history: '',
     imageUrl: '',
     stylingUrl: '',
@@ -45,9 +41,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
     if (item) {
       setFormData({
         name: item.name,
-        nameEn: item.nameEn,
         description: item.description,
-        material: item.material,
         history: item.history || '',
         imageUrl: item.imageUrl,
         stylingUrl: item.stylingUrl || '',
@@ -116,36 +110,19 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Name */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-primary-700 mb-2">
-                アイテム名（日本語）*
-              </label>
-              <input
-                type="text"
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
-                required
-              />
-            </div>
-
-            {/* Name English */}
-            <div>
-              <label htmlFor="nameEn" className="block text-sm font-medium text-primary-700 mb-2">
-                アイテム名（英語）*
-              </label>
-              <input
-                type="text"
-                id="nameEn"
-                value={formData.nameEn}
-                onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
-                required
-              />
-            </div>
+          {/* Name */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-primary-700 mb-2">
+              アイテム名*
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+              required
+            />
           </div>
 
           {/* Category */}
@@ -184,20 +161,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
             />
           </div>
 
-          {/* Material */}
-          <div>
-            <label htmlFor="material" className="block text-sm font-medium text-primary-700 mb-2">
-              素材*
-            </label>
-            <input
-              type="text"
-              id="material"
-              value={formData.material}
-              onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-              className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
-              required
-            />
-          </div>
+
 
           {/* History */}
           <div>

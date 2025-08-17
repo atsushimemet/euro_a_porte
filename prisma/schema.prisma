@@ -29,9 +29,7 @@ model User {
 model Item {
   id          String   @id @default(cuid())
   name        String
-  nameEn      String
   description String
-  material    String
   history     String?
   imageUrl    String
   stylingUrl  String?
