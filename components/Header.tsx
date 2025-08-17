@@ -89,7 +89,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/auth/signup"
-                className="btn-primary text-sm px-4 py-2 mx-4"
+                className="text-primary-600 hover:text-accent-600 transition-colors duration-200 px-4 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 新規登録
