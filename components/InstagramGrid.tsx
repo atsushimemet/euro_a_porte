@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { extractImageUrlFromEmbedCode, isValidEmbedCode } from '@/utils/instagramUtils'
 
 interface StylingItem {
   id: string
@@ -69,18 +70,39 @@ export default function InstagramGrid() {
                 onMouseEnter={() => setHoveredId(item.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {item.embedCode ? (
-                  <div 
-                    className="w-full h-80 transition-transform duration-300 group-hover:scale-105"
-                    dangerouslySetInnerHTML={{ __html: item.embedCode }}
-                  />
+                {item.embedCode && isValidEmbedCode(item.embedCode) ? (
+                  (() => {
+                    const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
+                    return extractedImageUrl ? (
+                      <Image
+                        src={extractedImageUrl}
+                        alt={item.caption}
+                        width={400}
+                        height={400}
+                        className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                        onError={(e) => {
+                          // 画像読み込みエラー時は元のimageUrlを使用
+                          const target = e.target as HTMLImageElement;
+                          target.src = item.imageUrl;
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.caption}
+                        width={400}
+                        height={400}
+                        className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    );
+                  })()
                 ) : (
                   <Image
                     src={item.imageUrl}
                     alt={item.caption}
                     width={400}
                     height={400}
-                    className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                                            className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 )}
                 

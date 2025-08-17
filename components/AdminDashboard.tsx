@@ -3,6 +3,7 @@
 import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import AdminItemForm from './AdminItemForm'
+import { extractImageUrlFromEmbedCode, isValidEmbedCode } from '@/utils/instagramUtils'
 
 interface Item {
   id: string
@@ -219,11 +220,28 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   {items.map((item) => (
                     <tr key={item.id} className="hover:bg-primary-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {item.embedCode ? (
-                          <div 
-                            className="w-16 h-16 rounded-lg overflow-hidden"
-                            dangerouslySetInnerHTML={{ __html: item.embedCode }}
-                          />
+                        {item.embedCode && isValidEmbedCode(item.embedCode) ? (
+                          (() => {
+                            const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
+                            return extractedImageUrl ? (
+                              <img
+                                src={extractedImageUrl}
+                                alt={item.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                                onError={(e) => {
+                                  // 画像読み込みエラー時は元のimageUrlを使用
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = item.imageUrl;
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={item.imageUrl}
+                                alt={item.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                              />
+                            );
+                          })()
                         ) : (
                           <img
                             src={item.imageUrl}
@@ -306,11 +324,28 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 }`}
               >
                 <div className="relative">
-                  {item.embedCode ? (
-                    <div 
-                      className="w-full h-48 overflow-hidden"
-                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
-                    />
+                  {item.embedCode && isValidEmbedCode(item.embedCode) ? (
+                    (() => {
+                      const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
+                      return extractedImageUrl ? (
+                        <img
+                          src={extractedImageUrl}
+                          alt={item.name}
+                          className="w-full h-48 object-cover"
+                          onError={(e) => {
+                            // 画像読み込みエラー時は元のimageUrlを使用
+                            const target = e.target as HTMLImageElement;
+                            target.src = item.imageUrl;
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className="w-full h-48 object-cover"
+                        />
+                      );
+                    })()
                   ) : (
                     <img
                       src={item.imageUrl}
