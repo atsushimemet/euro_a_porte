@@ -8,6 +8,7 @@ interface StylingItem {
   id: string
   name: string
   imageUrl: string
+  embedCode?: string
   caption: string
 }
 
@@ -29,6 +30,7 @@ export default function InstagramGrid() {
           id: item.id,
           name: item.name,
           imageUrl: item.imageUrl,
+          embedCode: item.embedCode,
           caption: `${item.name}の着こなし`
         }))
         setStylingItems(stylingItems)
@@ -67,13 +69,20 @@ export default function InstagramGrid() {
                 onMouseEnter={() => setHoveredId(item.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                <Image
-                  src={item.imageUrl}
-                  alt={item.caption}
-                  width={400}
-                  height={400}
-                  className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+                {item.embedCode ? (
+                  <div 
+                    className="w-full h-80 transition-transform duration-300 group-hover:scale-105"
+                    dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                  />
+                ) : (
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.caption}
+                    width={400}
+                    height={400}
+                    className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                )}
                 
                 {/* Overlay */}
                 <div className={`absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end`}>

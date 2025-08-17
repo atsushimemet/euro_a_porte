@@ -11,6 +11,7 @@ interface Item {
   history?: string
   imageUrl: string
   stylingUrl?: string
+  embedCode?: string
   category: string
   tags: string[]
   isStylingExample?: boolean
@@ -218,11 +219,18 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   {items.map((item) => (
                     <tr key={item.id} className="hover:bg-primary-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <img
-                          src={item.imageUrl}
-                          alt={item.name}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
+                        {item.embedCode ? (
+                          <div 
+                            className="w-16 h-16 rounded-lg overflow-hidden"
+                            dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                          />
+                        ) : (
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-16 h-16 object-cover rounded-lg"
+                          />
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-primary-900">
@@ -298,11 +306,18 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 }`}
               >
                 <div className="relative">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    className="w-full h-48 object-cover"
-                  />
+                  {item.embedCode ? (
+                    <div 
+                      className="w-full h-48 overflow-hidden"
+                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                    />
+                  ) : (
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-full h-48 object-cover"
+                    />
+                  )}
                   {item.isStylingExample && (
                     <div className="absolute top-2 right-2">
                       <Star className="w-6 h-6 text-accent-500 fill-current" />
