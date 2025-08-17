@@ -56,6 +56,8 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
     setIsLoading(true)
 
     try {
+      console.log('Submitting form data:', formData)
+      
       if (item) {
         // Update existing item
         await (onSave as (id: string, itemData: Partial<Item>) => void)(item.id, formData)
@@ -65,6 +67,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
       }
     } catch (error) {
       console.error('Error saving item:', error)
+      alert('アイテムの保存に失敗しました。エラーの詳細をコンソールで確認してください。')
     } finally {
       setIsLoading(false)
     }

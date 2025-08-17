@@ -32,25 +32,36 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    console.log('Received body:', body)
+    
     const { name, description, history, imageUrl, stylingUrl, category, tags } = body
+
+    // 必須フィールドの検証
+    if (!name || !description || !imageUrl || !category) {
+      return NextResponse.json(
+        { error: 'Missing required fields: name, description, imageUrl, category' },
+        { status: 400 }
+      )
+    }
 
     const item = await prisma.item.create({
       data: {
         name,
         description,
-        history,
+        history: history || null,
         imageUrl,
-        stylingUrl,
+        stylingUrl: stylingUrl || null,
         category,
-        tags
+        tags: tags || []
       }
     })
 
+    console.log('Created item:', item)
     return NextResponse.json(item, { status: 201 })
   } catch (error) {
     console.error('Error creating item:', error)
     return NextResponse.json(
-      { error: 'Failed to create item' },
+      { error: 'Failed to create item', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

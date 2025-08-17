@@ -47,6 +47,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const handleAddItem = async (itemData: Omit<Item, 'id'>) => {
     try {
+      console.log('Sending item data to API:', itemData)
+      
       const response = await fetch('/api/items', {
         method: 'POST',
         headers: {
@@ -56,11 +58,18 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       })
 
       if (response.ok) {
+        const result = await response.json()
+        console.log('Item created successfully:', result)
         setShowItemForm(false)
         fetchItems()
+      } else {
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        throw new Error(errorData.error || 'Failed to create item')
       }
     } catch (error) {
       console.error('Error adding item:', error)
+      throw error
     }
   }
 
