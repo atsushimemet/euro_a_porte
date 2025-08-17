@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
 
 // サンプルデータ（実際のInstagram APIと連携予定）
@@ -9,55 +10,55 @@ const samplePosts = [
     id: 1,
     imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
     caption: 'リネンブラウスとデニムの組み合わせ',
-    url: '#'
+    itemId: '1' // リネンブラウス
   },
   {
     id: 2,
     imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
     caption: 'モールスキンジャケットの着こなし',
-    url: '#'
+    itemId: '2' // モールスキンジャケット
   },
   {
     id: 3,
     imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
     caption: 'コットンシャツのシンプルスタイル',
-    url: '#'
+    itemId: '3' // コットンシャツ
   },
   {
     id: 4,
     imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop',
     caption: 'ヴィンテージデニムの魅力',
-    url: '#'
+    itemId: '4' // ヴィンテージデニム
   },
   {
     id: 5,
     imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop',
     caption: 'フランスのリペア文化',
-    url: '#'
+    itemId: '5' // ウールコート
   },
   {
     id: 6,
     imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&h=400&fit=crop',
     caption: '天然素材の風合い',
-    url: '#'
+    itemId: '6' // シルクスカーフ
   },
   {
     id: 7,
     imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
     caption: 'ユーロヴィンテージの着こなし',
-    url: '#'
+    itemId: '2' // モールスキンジャケット（重複）
   },
   {
     id: 8,
     imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
     caption: 'シンプルな組み合わせ',
-    url: '#'
+    itemId: '3' // コットンシャツ（重複）
   },
   {
     id: 9,
     imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop',
     caption: '長く着られる価値',
-    url: '#'
+    itemId: '4' // ヴィンテージデニム（重複）
   }
 ]
 
@@ -79,9 +80,10 @@ export default function InstagramGrid() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {samplePosts.map((post) => (
-            <div
+            <Link
               key={post.id}
-              className="relative group cursor-pointer overflow-hidden rounded-lg"
+              href={`/items/${post.itemId}`}
+              className="relative group cursor-pointer overflow-hidden rounded-lg block"
               onMouseEnter={() => setHoveredId(post.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
@@ -99,7 +101,7 @@ export default function InstagramGrid() {
                   <p className="text-sm font-medium">{post.caption}</p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
