@@ -11,7 +11,7 @@ export default function Hero() {
           </p>
           <p className="text-lg text-primary-700 mb-12 leading-relaxed">
             天然素材・丁寧な縫製が生むアイテムの美しさ。<br />
-            ロープライスで誰でも着られるユーロヴィンテージの世界へ。
+            ヴィンテージファッションの中では比較的安く、誰でも着られるユーロヴィンテージの世界へ。
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
