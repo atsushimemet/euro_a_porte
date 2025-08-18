@@ -24,7 +24,7 @@ export default function Hero() {
               href="/about"
               className="btn-secondary text-lg px-8 py-3"
             >
-              ユーロヴィンテージとは
+              Euro a Porteとは
             </a>
           </div>
         </div>

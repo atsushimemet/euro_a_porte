@@ -272,7 +272,7 @@ euro_a_porte/
 * メニュー項目：
 
   1. **Item**（アイテム一覧ページ）
-  2. About（ユーロヴィンテージとは／リペア文化紹介含む）
+  2. About（Euro a Porteとは／リペア文化紹介含む）
   3. Contact（問い合わせ）
   4. Instagramリンク
 
