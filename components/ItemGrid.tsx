@@ -7,45 +7,57 @@ import Link from 'next/link'
 const sampleItems = [
   {
     id: '1',
-    name: 'リネンブラウス',
-    category: 'トップス',
+    name: 'フレンチワークジャケット',
+    mainCategory: 'ワーク',
+    subCategory: 'フレンチワークジャケット',
+    category: 'ワーク - フレンチワークジャケット',
     imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop',
-    tags: ['リネン', 'ブラウス', 'トップス', 'フランス']
+    tags: ['フランス', 'モールスキン', 'ワーク', 'ヴィンテージ']
   },
   {
     id: '2',
-    name: 'モールスキンジャケット',
-    category: 'アウター',
+    name: 'ハンティングジャケット',
+    mainCategory: 'ワーク',
+    subCategory: 'ハンティングジャケット',
+    category: 'ワーク - ハンティングジャケット',
     imageUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
-    tags: ['モールスキン', 'ジャケット', 'アウター', 'イタリア']
+    tags: ['ハンティング', 'イギリス', '多機能', 'アウトドア']
   },
   {
     id: '3',
-    name: 'コットンシャツ',
-    category: 'トップス',
+    name: 'ビヨード',
+    mainCategory: 'ワーク',
+    subCategory: 'ビヨード',
+    category: 'ワーク - ビヨード',
     imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop',
-    tags: ['コットン', 'シャツ', 'トップス', 'フランス']
+    tags: ['フランス', 'ワーク', 'ヴィンテージ', 'コットン']
   },
   {
     id: '4',
-    name: 'ヴィンテージデニム',
-    category: 'ボトムス',
+    name: 'フランス軍チノパンツ',
+    mainCategory: 'ミリタリー',
+    subCategory: 'フランス',
+    category: 'ミリタリー - フランス',
     imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=400&fit=crop',
-    tags: ['デニム', 'ジーンズ', 'ボトムス', 'アメリカ']
+    tags: ['フランス軍', 'チノ', 'ミリタリー', '実用性']
   },
   {
     id: '5',
-    name: 'ウールコート',
-    category: 'アウター',
+    name: 'イギリス軍ウールジャンパー',
+    mainCategory: 'ミリタリー',
+    subCategory: 'イギリス',
+    category: 'ミリタリー - イギリス',
     imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop',
-    tags: ['ウール', 'コート', 'アウター', 'イギリス']
+    tags: ['イギリス軍', 'ウール', '保温性', '軍用']
   },
   {
     id: '6',
-    name: 'シルクスカーフ',
-    category: 'アクセサリー',
+    name: 'スウェーデン軍フィールドジャケット',
+    mainCategory: 'ミリタリー',
+    subCategory: 'スウェーデン',
+    category: 'ミリタリー - スウェーデン',
     imageUrl: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&h=400&fit=crop',
-    tags: ['シルク', 'スカーフ', 'アクセサリー', 'フランス']
+    tags: ['スウェーデン軍', 'フィールド', 'ミリタリー', '北欧']
   }
 ]
 
@@ -66,9 +78,12 @@ export default function ItemGrid() {
               height={400}
               className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute top-4 left-4">
-              <span className="bg-accent-600 text-white text-xs px-2 py-1 rounded-full">
-                {item.category}
+            <div className="absolute top-4 left-4 space-y-1">
+              <span className="bg-accent-600 text-white text-xs px-2 py-1 rounded-full block">
+                {item.mainCategory}
+              </span>
+              <span className="bg-accent-500 text-white text-xs px-2 py-1 rounded-full block">
+                {item.subCategory}
               </span>
             </div>
           </div>

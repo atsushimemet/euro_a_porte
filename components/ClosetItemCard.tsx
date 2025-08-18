@@ -10,6 +10,8 @@ interface ClosetItem {
   name: string
   description: string
   imageUrl: string
+  mainCategory?: string
+  subCategory?: string
   category: string
   tags: string[]
   isPublic: boolean

@@ -48,15 +48,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Received body:', body)
     
-    const { name, description, history, imageUrl, stylingUrl, embedCode, category, tags } = body
+    const { name, description, history, imageUrl, stylingUrl, embedCode, mainCategory, subCategory, category, tags } = body
 
     // 必須フィールドの検証
-    if (!name || !description || !imageUrl || !category) {
+    if (!name || !description || !imageUrl || !mainCategory || !subCategory) {
       return NextResponse.json(
-        { error: 'Missing required fields: name, description, imageUrl, category' },
+        { error: 'Missing required fields: name, description, imageUrl, mainCategory, subCategory' },
         { status: 400 }
       )
     }
+
+    // Generate category if not provided
+    const finalCategory = category || `${mainCategory} - ${subCategory}`
 
           const item = await prisma.item.create({
         data: {
@@ -66,7 +69,9 @@ export async function POST(request: NextRequest) {
           imageUrl,
           stylingUrl: stylingUrl || null,
           embedCode: embedCode || null,
-          category,
+          mainCategory,
+          subCategory,
+          category: finalCategory,
           tags: tags || []
         }
       })

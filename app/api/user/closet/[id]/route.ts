@@ -59,7 +59,7 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { name, description, imageUrl, category, tags, favoritePoints, isPublic } = body
+    const { name, description, imageUrl, mainCategory, subCategory, category, tags, favoritePoints, isPublic } = body
 
     // アイテムが存在し、ユーザーが所有しているかチェック
     const existingItem = await prisma.closetItem.findFirst({
@@ -73,6 +73,9 @@ export async function PATCH(
       return NextResponse.json({ error: 'Item not found' }, { status: 404 })
     }
 
+    // Generate category if not provided but mainCategory and subCategory are available
+    const finalCategory = category || (mainCategory && subCategory ? `${mainCategory} - ${subCategory}` : existingItem.category)
+
     // アイテムを更新
     const updatedItem = await prisma.closetItem.update({
       where: {
@@ -82,7 +85,9 @@ export async function PATCH(
         name,
         description,
         imageUrl,
-        category,
+        mainCategory,
+        subCategory,
+        category: finalCategory,
         tags,
         favoritePoints,
         isPublic,
