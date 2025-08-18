@@ -2,7 +2,7 @@ import Header from '@/components/Header'
 import Image from 'next/image'
 
 export const metadata = {
-  title: 'About - ユーロヴィンテージとは - Euro à Porter',
+  title: 'About - Euro a Porteとは - Euro à Porter',
   description: 'ユーロヴィンテージの魅力とフランスのリペア文化について。天然素材・丁寧な縫製が生むアイテムの美しさをご紹介します。',
 }
 
@@ -14,7 +14,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-primary-800 mb-6">
-              ユーロヴィンテージとは
+              Euro a Porteとは
             </h1>
             <p className="text-lg text-primary-600">
               「ユーロを着よう！」という行動喚起で、男女問わずユーロヴィンテージの認知を拡大する
