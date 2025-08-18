@@ -6,7 +6,7 @@ export function extractImageUrlFromEmbedCode(embedCode: string): string | null {
     if (permalinkMatch && permalinkMatch[1]) {
       const postId = permalinkMatch[1].split('/p/')[1]?.split('/')[0];
       if (postId) {
-        // InstagramのOGP画像URLを構築
+        // InstagramのOGP画像URLを構築（CORS対応）
         return `https://www.instagram.com/p/${postId}/media/?size=m`;
       }
     }
@@ -22,6 +22,14 @@ export function extractImageUrlFromEmbedCode(embedCode: string): string | null {
     console.error('Error extracting image URL from embed code:', error);
     return null;
   }
+}
+
+// Instagram投稿のプレースホルダー画像URLを生成する関数
+export function getInstagramPlaceholderUrl(postId: string | null): string {
+  if (!postId) {
+    return 'https://via.placeholder.com/300x300/f0f0f0/999999?text=Instagram+Post';
+  }
+  return `https://via.placeholder.com/300x300/f0f0f0/999999?text=Instagram+${postId}`;
 }
 
 // 埋め込みコードから投稿IDを抽出する関数

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds } from '@/utils/instagramUtils'
+import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds, getInstagramPlaceholderUrl } from '@/utils/instagramUtils'
 
 interface StylingItem {
   id: string
@@ -121,21 +121,14 @@ export default function InstagramGrid() {
                     </h4>
                     <div className="flex items-center space-x-4">
                       {(() => {
-                        const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
-                        return extractedImageUrl ? (
+                        const postId = extractPostIdFromEmbedCode(item.embedCode);
+                        const placeholderUrl = getInstagramPlaceholderUrl(postId);
+                        return (
                           <img
-                            src={extractedImageUrl}
+                            src={placeholderUrl}
                             alt={`${item.name}のInstagram投稿`}
                             className="w-24 h-24 object-cover rounded-lg"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                            }}
                           />
-                        ) : (
-                          <div className="w-24 h-24 bg-primary-100 rounded-lg flex items-center justify-center">
-                            <span className="text-primary-500 text-xs">画像なし</span>
-                          </div>
                         );
                       })()}
                       <div className="flex-1">

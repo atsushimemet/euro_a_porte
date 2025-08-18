@@ -24,6 +24,10 @@ const nextConfig = {
       },
     ],
   },
+  // SSRハイドレーションエラーを抑制
+  experimental: {
+    suppressHydrationWarning: true,
+  },
 }
 
 module.exports = nextConfig

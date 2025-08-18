@@ -4,7 +4,7 @@ import React from 'react'
 import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import AdminItemForm from './AdminItemForm'
-import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds } from '@/utils/instagramUtils'
+import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds, getInstagramPlaceholderUrl } from '@/utils/instagramUtils'
 
 interface Item {
   id: string
@@ -321,21 +321,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                               </h4>
                               <div className="flex items-center space-x-4">
                                 {(() => {
-                                  const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
-                                  return extractedImageUrl ? (
+                                  const postId = extractPostIdFromEmbedCode(item.embedCode);
+                                  const placeholderUrl = getInstagramPlaceholderUrl(postId);
+                                  return (
                                     <img
-                                      src={extractedImageUrl}
+                                      src={placeholderUrl}
                                       alt={`${item.name}のInstagram投稿`}
                                       className="w-32 h-32 object-cover rounded-lg"
-                                      onError={(e) => {
-                                        const target = e.target as HTMLImageElement;
-                                        target.style.display = 'none';
-                                      }}
                                     />
-                                  ) : (
-                                    <div className="w-32 h-32 bg-primary-100 rounded-lg flex items-center justify-center">
-                                      <span className="text-primary-500 text-sm">画像なし</span>
-                                    </div>
                                   );
                                 })()}
                                 <div className="flex-1">
@@ -424,21 +417,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     </h4>
                     <div className="flex items-center space-x-4">
                       {(() => {
-                        const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
-                        return extractedImageUrl ? (
+                        const postId = extractPostIdFromEmbedCode(item.embedCode);
+                        const placeholderUrl = getInstagramPlaceholderUrl(postId);
+                        return (
                           <img
-                            src={extractedImageUrl}
+                            src={placeholderUrl}
                             alt={`${item.name}のInstagram投稿`}
                             className="w-24 h-24 object-cover rounded-lg"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                            }}
                           />
-                        ) : (
-                          <div className="w-24 h-24 bg-primary-100 rounded-lg flex items-center justify-center">
-                            <span className="text-primary-500 text-xs">画像なし</span>
-                          </div>
                         );
                       })()}
                       <div className="flex-1">
