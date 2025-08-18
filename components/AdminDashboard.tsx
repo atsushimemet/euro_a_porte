@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import AdminItemForm from './AdminItemForm'
@@ -52,11 +53,25 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       // DOMが更新された後にInstagram埋め込みを処理
       const timer = setTimeout(() => {
         processInstagramEmbeds();
-      }, 100);
+      }, 1000); // より長い遅延を設定
       
       return () => clearTimeout(timer);
     }
   }, [items])
+
+  // タブ切り替え時の埋め込み処理
+  useEffect(() => {
+    if (activeTab === 'items') {
+      const hasEmbedCode = items.some(item => item.embedCode && isValidEmbedCode(item.embedCode));
+      if (hasEmbedCode) {
+        const timer = setTimeout(() => {
+          processInstagramEmbeds();
+        }, 500);
+        
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [activeTab, items])
 
   const fetchItems = async () => {
     try {
@@ -243,8 +258,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 </thead>
                 <tbody className="bg-white divide-y divide-primary-200">
                   {items.map((item) => (
-                    <>
-                      <tr key={item.id} className="hover:bg-primary-50">
+                    <React.Fragment key={item.id}>
+                      <tr className="hover:bg-primary-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <img
                             src={item.imageUrl}
@@ -298,7 +313,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                       </tr>
                       {/* Instagram埋め込みコンポーネント表示行 */}
                       {item.embedCode && isValidEmbedCode(item.embedCode) && (
-                        <tr key={`${item.id}-embed`} className="bg-primary-50">
+                        <tr className="bg-primary-50">
                           <td colSpan={5} className="px-6 py-4">
                             <div className="bg-white rounded-lg p-4 border border-primary-200">
                               <h4 className="text-sm font-medium text-primary-700 mb-3">
@@ -312,7 +327,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                           </td>
                         </tr>
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>

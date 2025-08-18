@@ -87,9 +87,26 @@ export function loadInstagramEmbedScript(): Promise<void> {
 export async function processInstagramEmbeds(): Promise<void> {
   try {
     await loadInstagramEmbedScript();
-    if (window.instgrm) {
-      window.instgrm.Embeds.process();
-    }
+    
+    // 複数回試行して確実に処理する
+    let attempts = 0;
+    const maxAttempts = 5;
+    
+    const processEmbeds = () => {
+      if (window.instgrm) {
+        try {
+          window.instgrm.Embeds.process();
+          console.log('Instagram embeds processed successfully');
+        } catch (error) {
+          console.error('Error in instgrm.Embeds.process():', error);
+        }
+      } else if (attempts < maxAttempts) {
+        attempts++;
+        setTimeout(processEmbeds, 200);
+      }
+    };
+    
+    processEmbeds();
   } catch (error) {
     console.error('Error processing Instagram embeds:', error);
   }
