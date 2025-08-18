@@ -240,9 +240,6 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 <thead className="bg-primary-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
-                      画像
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
                       名前
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">
@@ -260,13 +257,6 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   {items.map((item) => (
                     <React.Fragment key={item.id}>
                       <tr className="hover:bg-primary-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <img
-                            src={item.imageUrl}
-                            alt={item.name}
-                            className="w-16 h-16 object-cover rounded-lg"
-                          />
-                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-primary-900">
                             {item.name}
