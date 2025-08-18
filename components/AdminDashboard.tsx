@@ -218,58 +218,76 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 </thead>
                 <tbody className="bg-white divide-y divide-primary-200">
                   {items.map((item) => (
-                    <tr key={item.id} className="hover:bg-primary-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <img
-                          src={item.imageUrl}
-                          alt={item.name}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-primary-900">
-                          {item.name}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-accent-100 text-accent-800">
-                          {item.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex flex-wrap gap-1">
-                          {item.tags.slice(0, 3).map((tag) => (
-                            <span
-                              key={tag}
-                              className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800"
+                    <>
+                      <tr key={item.id} className="hover:bg-primary-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-16 h-16 object-cover rounded-lg"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-primary-900">
+                            {item.name}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-accent-100 text-accent-800">
+                            {item.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex flex-wrap gap-1">
+                            {item.tags.slice(0, 3).map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                            {item.tags.length > 3 && (
+                              <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800">
+                                +{item.tags.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => openItemForm(item)}
+                              className="text-accent-600 hover:text-accent-900"
                             >
-                              {tag}
-                            </span>
-                          ))}
-                          {item.tags.length > 3 && (
-                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800">
-                              +{item.tags.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => openItemForm(item)}
-                            className="text-accent-600 hover:text-accent-900"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteItem(item.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                              <Edit size={16} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteItem(item.id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      {/* Instagram埋め込みコンポーネント表示行 */}
+                      {item.embedCode && isValidEmbedCode(item.embedCode) && (
+                        <tr key={`${item.id}-embed`} className="bg-primary-50">
+                          <td colSpan={5} className="px-6 py-4">
+                            <div className="bg-white rounded-lg p-4 border border-primary-200">
+                              <h4 className="text-sm font-medium text-primary-700 mb-3">
+                                Instagram投稿
+                              </h4>
+                              <div 
+                                className="w-full"
+                                dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   ))}
                 </tbody>
               </table>
