@@ -62,57 +62,45 @@ export default function InstagramGrid() {
           </div>
         ) : stylingItems.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {stylingItems.map((item) => (
-              <Link
+                        {stylingItems.map((item) => (
+              <div
                 key={item.id}
-                href={`/items/${item.id}`}
-                className="relative group cursor-pointer overflow-hidden rounded-lg block"
-                onMouseEnter={() => setHoveredId(item.id)}
-                onMouseLeave={() => setHoveredId(null)}
+                className="relative group cursor-pointer overflow-hidden rounded-lg block bg-white shadow-lg"
               >
-                {item.embedCode && isValidEmbedCode(item.embedCode) ? (
-                  (() => {
-                    const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
-                    return extractedImageUrl ? (
-                      <Image
-                        src={extractedImageUrl}
-                        alt={item.caption}
-                        width={400}
-                        height={400}
-                        className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          // 画像読み込みエラー時は元のimageUrlを使用
-                          const target = e.target as HTMLImageElement;
-                          target.src = item.imageUrl;
-                        }}
-                      />
-                    ) : (
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.caption}
-                        width={400}
-                        height={400}
-                        className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    );
-                  })()
-                ) : (
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.caption}
-                    width={400}
-                    height={400}
-                                            className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                )}
+                                 <Link 
+                   href={`/items/${item.id}`}
+                   onMouseEnter={() => setHoveredId(item.id)}
+                   onMouseLeave={() => setHoveredId(null)}
+                 >
+                   <Image
+                     src={item.imageUrl}
+                     alt={item.caption}
+                     width={400}
+                     height={400}
+                     className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                   />
+                   
+                   {/* Overlay */}
+                   <div className={`absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end`}>
+                     <div className="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                       <p className="text-sm font-medium">{item.caption}</p>
+                     </div>
+                   </div>
+                 </Link>
                 
-                {/* Overlay */}
-                <div className={`absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end`}>
-                  <div className="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <p className="text-sm font-medium">{item.caption}</p>
+                {/* Instagram埋め込みコンポーネント表示エリア */}
+                {item.embedCode && isValidEmbedCode(item.embedCode) && (
+                  <div className="p-4 border-t border-primary-200 bg-primary-50">
+                    <h4 className="text-sm font-medium text-primary-700 mb-3">
+                      Instagram投稿
+                    </h4>
+                    <div 
+                      className="w-full"
+                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                    />
                   </div>
-                </div>
-              </Link>
+                )}
+              </div>
             ))}
           </div>
         ) : (

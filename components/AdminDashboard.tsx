@@ -220,35 +220,11 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   {items.map((item) => (
                     <tr key={item.id} className="hover:bg-primary-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {item.embedCode && isValidEmbedCode(item.embedCode) ? (
-                          (() => {
-                            const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
-                            return extractedImageUrl ? (
-                              <img
-                                src={extractedImageUrl}
-                                alt={item.name}
-                                className="w-16 h-16 object-cover rounded-lg"
-                                onError={(e) => {
-                                  // 画像読み込みエラー時は元のimageUrlを使用
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = item.imageUrl;
-                                }}
-                              />
-                            ) : (
-                              <img
-                                src={item.imageUrl}
-                                alt={item.name}
-                                className="w-16 h-16 object-cover rounded-lg"
-                              />
-                            );
-                          })()
-                        ) : (
-                          <img
-                            src={item.imageUrl}
-                            alt={item.name}
-                            className="w-16 h-16 object-cover rounded-lg"
-                          />
-                        )}
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-primary-900">
@@ -324,35 +300,11 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 }`}
               >
                 <div className="relative">
-                  {item.embedCode && isValidEmbedCode(item.embedCode) ? (
-                    (() => {
-                      const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
-                      return extractedImageUrl ? (
-                        <img
-                          src={extractedImageUrl}
-                          alt={item.name}
-                          className="w-full h-48 object-cover"
-                          onError={(e) => {
-                            // 画像読み込みエラー時は元のimageUrlを使用
-                            const target = e.target as HTMLImageElement;
-                            target.src = item.imageUrl;
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={item.imageUrl}
-                          alt={item.name}
-                          className="w-full h-48 object-cover"
-                        />
-                      );
-                    })()
-                  ) : (
-                    <img
-                      src={item.imageUrl}
-                      alt={item.name}
-                      className="w-full h-48 object-cover"
-                    />
-                  )}
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="w-full h-48 object-cover"
+                  />
                   {item.isStylingExample && (
                     <div className="absolute top-2 right-2">
                       <Star className="w-6 h-6 text-accent-500 fill-current" />
@@ -374,6 +326,18 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     {item.isStylingExample ? 'スタイリング例から削除' : 'スタイリング例に追加'}
                   </button>
                 </div>
+                {/* Instagram埋め込みコンポーネント表示エリア */}
+                {item.embedCode && isValidEmbedCode(item.embedCode) && (
+                  <div className="p-4 border-t border-primary-200 bg-primary-50">
+                    <h4 className="text-sm font-medium text-primary-700 mb-3">
+                      Instagram投稿
+                    </h4>
+                    <div 
+                      className="w-full"
+                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>
