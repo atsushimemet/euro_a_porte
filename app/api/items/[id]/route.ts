@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
-
-const prisma = new PrismaClient()
+import { prisma } from '@/utils/prisma'
 
 // GET: 個別アイテム取得
 export async function GET(
@@ -9,6 +7,15 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    // データベース接続の確認
+    if (!process.env.DATABASE_URL) {
+      console.error('DATABASE_URL environment variable is not set')
+      return NextResponse.json(
+        { error: 'Database configuration error' },
+        { status: 500 }
+      )
+    }
+
     const item = await prisma.item.findUnique({
       where: {
         id: params.id
@@ -25,8 +32,15 @@ export async function GET(
     return NextResponse.json(item)
   } catch (error) {
     console.error('Error fetching item:', error)
+    
+    // データベース接続エラーの詳細ログ
+    if (error instanceof Error) {
+      console.error('Error details:', error.message)
+      console.error('Error stack:', error.stack)
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to fetch item' },
+      { error: 'Failed to fetch item', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

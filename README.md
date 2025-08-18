@@ -30,6 +30,24 @@
 - Docker Desktop
 - Node.js 18+ (ローカル開発用)
 
+### 環境変数の設定
+
+本番環境でデプロイする前に、以下の環境変数を設定してください：
+
+```bash
+# Database Configuration
+DATABASE_URL="postgresql://username:password@host:port/database"
+
+# NextAuth Configuration
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="https://your-domain.com"
+
+# PostgreSQL Configuration (for docker-compose)
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="your-secure-password"
+POSTGRES_DB="euro_a_porte"
+```
+
 ### 開発環境の起動
 
 1. リポジトリをクローン
@@ -53,11 +71,31 @@ docker-compose exec app npx prisma generate
 
 # データベースマイグレーション
 docker-compose exec app npx prisma db push
+
+# サンプルデータの投入
+docker-compose exec app npm run db:seed
 ```
 
 3. アプリケーションにアクセス
 - メインアプリ: http://localhost:3000
 - データベース: localhost:5432
+
+### 本番環境のデプロイ
+
+1. 本番環境用のDocker Composeで起動
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+2. データベースマイグレーション
+```bash
+docker-compose -f docker-compose.prod.yml exec app npx prisma migrate deploy
+```
+
+3. サンプルデータの投入（初回のみ）
+```bash
+docker-compose -f docker-compose.prod.yml exec app npm run db:seed
+```
 
 ### 便利なコマンド
 
