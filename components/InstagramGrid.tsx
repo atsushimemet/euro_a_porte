@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { extractImageUrlFromEmbedCode, isValidEmbedCode, processInstagramEmbeds } from '@/utils/instagramUtils'
+import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds } from '@/utils/instagramUtils'
 
 interface StylingItem {
   id: string
@@ -113,16 +113,48 @@ export default function InstagramGrid() {
                    </div>
                  </Link>
                 
-                {/* Instagram埋め込みコンポーネント表示エリア */}
+                {/* Instagram投稿表示エリア */}
                 {item.embedCode && isValidEmbedCode(item.embedCode) && (
                   <div className="p-4 border-t border-primary-200 bg-primary-50">
                     <h4 className="text-sm font-medium text-primary-700 mb-3">
                       Instagram投稿
                     </h4>
-                    <div 
-                      className="w-full"
-                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
-                    />
+                    <div className="flex items-center space-x-4">
+                      {(() => {
+                        const extractedImageUrl = extractImageUrlFromEmbedCode(item.embedCode);
+                        return extractedImageUrl ? (
+                          <img
+                            src={extractedImageUrl}
+                            alt={`${item.name}のInstagram投稿`}
+                            className="w-24 h-24 object-cover rounded-lg"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-24 h-24 bg-primary-100 rounded-lg flex items-center justify-center">
+                            <span className="text-primary-500 text-xs">画像なし</span>
+                          </div>
+                        );
+                      })()}
+                      <div className="flex-1">
+                        <p className="text-sm text-primary-600">
+                          Instagram投稿の画像
+                        </p>
+                        <a
+                          href={extractPostIdFromEmbedCode(item.embedCode) ? 
+                            `https://www.instagram.com/p/${extractPostIdFromEmbedCode(item.embedCode)}/` : 
+                            '#'
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent-600 hover:text-accent-800 text-xs mt-1 inline-block"
+                        >
+                          Instagramで見る →
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

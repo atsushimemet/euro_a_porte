@@ -1,19 +1,20 @@
 // Instagram埋め込みコードから画像URLを抽出する関数
 export function extractImageUrlFromEmbedCode(embedCode: string): string | null {
   try {
-    // 埋め込みコードから画像URLを抽出する正規表現
-    const imgMatch = embedCode.match(/<img[^>]+src="([^"]+)"/);
-    if (imgMatch && imgMatch[1]) {
-      return imgMatch[1];
-    }
-
-    // 代替方法: InstagramのOGP画像URLを構築
+    // 埋め込みコードから投稿IDを抽出
     const permalinkMatch = embedCode.match(/data-instgrm-permalink="([^"]+)"/);
     if (permalinkMatch && permalinkMatch[1]) {
       const postId = permalinkMatch[1].split('/p/')[1]?.split('/')[0];
       if (postId) {
+        // InstagramのOGP画像URLを構築
         return `https://www.instagram.com/p/${postId}/media/?size=m`;
       }
+    }
+
+    // 代替方法: 埋め込みコードから直接画像URLを抽出
+    const imgMatch = embedCode.match(/<img[^>]+src="([^"]+)"/);
+    if (imgMatch && imgMatch[1]) {
+      return imgMatch[1];
     }
 
     return null;
