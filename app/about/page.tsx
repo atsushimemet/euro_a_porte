@@ -51,7 +51,7 @@ export default function AboutPage() {
 
             {/* ロープライス */}
             <section>
-              <h2 className="text-3xl font-bold text-primary-800 mb-8">ロープライスで誰でも着られる</h2>
+              <h2 className="text-3xl font-bold text-primary-800 mb-8">ヴィンテージファッションの中では比較的安く、誰でも着られる</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div className="relative overflow-hidden rounded-lg order-2 md:order-1">
                   <Image
