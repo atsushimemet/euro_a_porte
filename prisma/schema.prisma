@@ -33,7 +33,7 @@ model Item {
   history     String?
   imageUrl    String
   stylingUrl  String?
-  embedCode   String?
+
   category    String
   tags        String[]
   isStylingExample Boolean @default(false)

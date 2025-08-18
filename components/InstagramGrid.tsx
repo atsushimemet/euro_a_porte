@@ -3,13 +3,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds, getInstagramPlaceholderUrl } from '@/utils/instagramUtils'
+
 
 interface StylingItem {
   id: string
   name: string
   imageUrl: string
-  embedCode?: string
+
   caption: string
 }
 
@@ -22,30 +22,10 @@ export default function InstagramGrid() {
     fetchStylingItems()
   }, [])
 
-  // Instagram埋め込みコンポーネントの処理
-  useEffect(() => {
-    if (stylingItems.length > 0) {
-      // アイテムが読み込まれた後に少し遅延してからInstagram埋め込みを処理
-      const timer = setTimeout(() => {
-        processInstagramEmbeds();
-      }, 500);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [stylingItems])
 
-  // 埋め込みコンポーネントが表示された後の処理
-  useEffect(() => {
-    const hasEmbedCode = stylingItems.some(item => item.embedCode && isValidEmbedCode(item.embedCode));
-    if (hasEmbedCode) {
-      // DOMが更新された後にInstagram埋め込みを処理
-      const timer = setTimeout(() => {
-        processInstagramEmbeds();
-      }, 100);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [stylingItems])
+
+
+
 
   const fetchStylingItems = async () => {
     try {
@@ -56,7 +36,6 @@ export default function InstagramGrid() {
           id: item.id,
           name: item.name,
           imageUrl: item.imageUrl,
-          embedCode: item.embedCode,
           caption: `${item.name}の着こなし`
         }))
         setStylingItems(stylingItems)
@@ -113,43 +92,7 @@ export default function InstagramGrid() {
                    </div>
                  </Link>
                 
-                {/* Instagram投稿表示エリア */}
-                {item.embedCode && isValidEmbedCode(item.embedCode) && (
-                  <div className="p-4 border-t border-primary-200 bg-primary-50">
-                    <h4 className="text-sm font-medium text-primary-700 mb-3">
-                      Instagram投稿
-                    </h4>
-                    <div className="flex items-center space-x-4">
-                      {(() => {
-                        const postId = extractPostIdFromEmbedCode(item.embedCode);
-                        const placeholderUrl = getInstagramPlaceholderUrl(postId);
-                        return (
-                          <img
-                            src={placeholderUrl}
-                            alt={`${item.name}のInstagram投稿`}
-                            className="w-24 h-24 object-cover rounded-lg"
-                          />
-                        );
-                      })()}
-                      <div className="flex-1">
-                        <p className="text-sm text-primary-600">
-                          Instagram投稿の画像
-                        </p>
-                        <a
-                          href={extractPostIdFromEmbedCode(item.embedCode) ? 
-                            `https://www.instagram.com/p/${extractPostIdFromEmbedCode(item.embedCode)}/` : 
-                            '#'
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-accent-600 hover:text-accent-800 text-xs mt-1 inline-block"
-                        >
-                          Instagramで見る →
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                )}
+
               </div>
             ))}
           </div>

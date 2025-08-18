@@ -10,7 +10,7 @@ interface Item {
   history?: string
   imageUrl: string
   stylingUrl?: string
-  embedCode?: string
+
   category: string
   tags: string[]
 }
@@ -28,7 +28,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
     history: '',
     imageUrl: '',
     stylingUrl: '',
-    embedCode: '',
+
     category: '',
     tags: [] as string[]
   })
@@ -47,7 +47,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
         history: item.history || '',
         imageUrl: item.imageUrl,
         stylingUrl: item.stylingUrl || '',
-        embedCode: item.embedCode || '',
+  
         category: item.category,
         tags: item.tags
       })
@@ -214,23 +214,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
             </div>
           </div>
 
-          {/* Embed Code */}
-          <div>
-            <label htmlFor="embedCode" className="block text-sm font-medium text-primary-700 mb-2">
-              Instagram埋め込みコード
-            </label>
-            <textarea
-              id="embedCode"
-              value={formData.embedCode}
-              onChange={(e) => setFormData({ ...formData, embedCode: e.target.value })}
-              rows={4}
-              placeholder="Instagramの埋め込みコードを貼り付けてください"
-              className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
-            />
-            <p className="text-sm text-primary-600 mt-1">
-              Instagram投稿の「埋め込み」ボタンから取得したコードを貼り付けてください
-            </p>
-          </div>
+
 
           {/* Tags */}
           <div>

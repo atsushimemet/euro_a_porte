@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Received body:', body)
     
-    const { name, description, history, imageUrl, stylingUrl, embedCode, category, tags } = body
+    const { name, description, history, imageUrl, stylingUrl, category, tags } = body
 
     // 必須フィールドの検証
     if (!name || !description || !imageUrl || !category) {
@@ -44,18 +44,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const item = await prisma.item.create({
-      data: {
-        name,
-        description,
-        history: history || null,
-        imageUrl,
-        stylingUrl: stylingUrl || null,
-        embedCode: embedCode || null,
-        category,
-        tags: tags || []
-      }
-    })
+          const item = await prisma.item.create({
+        data: {
+          name,
+          description,
+          history: history || null,
+          imageUrl,
+          stylingUrl: stylingUrl || null,
+          category,
+          tags: tags || []
+        }
+      })
 
     console.log('Created item:', item)
     return NextResponse.json(item, { status: 201 })

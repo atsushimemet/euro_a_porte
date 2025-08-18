@@ -4,7 +4,7 @@ import React from 'react'
 import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import AdminItemForm from './AdminItemForm'
-import { extractImageUrlFromEmbedCode, extractPostIdFromEmbedCode, isValidEmbedCode, processInstagramEmbeds, getInstagramPlaceholderUrl } from '@/utils/instagramUtils'
+
 
 interface Item {
   id: string
@@ -13,7 +13,7 @@ interface Item {
   history?: string
   imageUrl: string
   stylingUrl?: string
-  embedCode?: string
+
   category: string
   tags: string[]
   isStylingExample?: boolean
@@ -311,47 +311,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                           </div>
                         </td>
                       </tr>
-                      {/* Instagram投稿表示行 */}
-                      {item.embedCode && isValidEmbedCode(item.embedCode) && (
-                        <tr className="bg-primary-50">
-                          <td colSpan={5} className="px-6 py-4">
-                            <div className="bg-white rounded-lg p-4 border border-primary-200">
-                              <h4 className="text-sm font-medium text-primary-700 mb-3">
-                                Instagram投稿
-                              </h4>
-                              <div className="flex items-center space-x-4">
-                                {(() => {
-                                  const postId = extractPostIdFromEmbedCode(item.embedCode);
-                                  const placeholderUrl = getInstagramPlaceholderUrl(postId);
-                                  return (
-                                    <img
-                                      src={placeholderUrl}
-                                      alt={`${item.name}のInstagram投稿`}
-                                      className="w-32 h-32 object-cover rounded-lg"
-                                    />
-                                  );
-                                })()}
-                                <div className="flex-1">
-                                  <p className="text-sm text-primary-600">
-                                    Instagram投稿の画像を表示しています
-                                  </p>
-                                  <a
-                                    href={extractPostIdFromEmbedCode(item.embedCode) ? 
-                                      `https://www.instagram.com/p/${extractPostIdFromEmbedCode(item.embedCode)}/` : 
-                                      '#'
-                                    }
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-accent-600 hover:text-accent-800 text-sm mt-2 inline-block"
-                                  >
-                                    Instagramで見る →
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
+
                     </React.Fragment>
                   ))}
                 </tbody>
@@ -409,43 +369,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     {item.isStylingExample ? 'スタイリング例から削除' : 'スタイリング例に追加'}
                   </button>
                 </div>
-                {/* Instagram投稿表示エリア */}
-                {item.embedCode && isValidEmbedCode(item.embedCode) && (
-                  <div className="p-4 border-t border-primary-200 bg-primary-50">
-                    <h4 className="text-sm font-medium text-primary-700 mb-3">
-                      Instagram投稿
-                    </h4>
-                    <div className="flex items-center space-x-4">
-                      {(() => {
-                        const postId = extractPostIdFromEmbedCode(item.embedCode);
-                        const placeholderUrl = getInstagramPlaceholderUrl(postId);
-                        return (
-                          <img
-                            src={placeholderUrl}
-                            alt={`${item.name}のInstagram投稿`}
-                            className="w-24 h-24 object-cover rounded-lg"
-                          />
-                        );
-                      })()}
-                      <div className="flex-1">
-                        <p className="text-sm text-primary-600">
-                          Instagram投稿の画像
-                        </p>
-                        <a
-                          href={extractPostIdFromEmbedCode(item.embedCode) ? 
-                            `https://www.instagram.com/p/${extractPostIdFromEmbedCode(item.embedCode)}/` : 
-                            '#'
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-accent-600 hover:text-accent-800 text-xs mt-1 inline-block"
-                        >
-                          Instagramで見る →
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                )}
+
               </div>
             ))}
           </div>

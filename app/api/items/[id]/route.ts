@@ -39,22 +39,21 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    const { name, description, history, imageUrl, stylingUrl, embedCode, category, tags, isStylingExample } = body
+    const { name, description, history, imageUrl, stylingUrl, category, tags, isStylingExample } = body
 
-    const item = await prisma.item.update({
-      where: { id: params.id },
-      data: {
-        name,
-        description,
-        history,
-        imageUrl,
-        stylingUrl,
-        embedCode,
-        category,
-        tags,
-        isStylingExample
-      }
-    })
+          const item = await prisma.item.update({
+        where: { id: params.id },
+        data: {
+          name,
+          description,
+          history,
+          imageUrl,
+          stylingUrl,
+          category,
+          tags,
+          isStylingExample
+        }
+      })
 
     return NextResponse.json(item)
   } catch (error) {
