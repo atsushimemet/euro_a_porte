@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { extractImageUrlFromEmbedCode, isValidEmbedCode } from '@/utils/instagramUtils'
+import { extractImageUrlFromEmbedCode, isValidEmbedCode, processInstagramEmbeds } from '@/utils/instagramUtils'
 
 interface StylingItem {
   id: string
@@ -21,6 +21,31 @@ export default function InstagramGrid() {
   useEffect(() => {
     fetchStylingItems()
   }, [])
+
+  // Instagram埋め込みコンポーネントの処理
+  useEffect(() => {
+    if (stylingItems.length > 0) {
+      // アイテムが読み込まれた後に少し遅延してからInstagram埋め込みを処理
+      const timer = setTimeout(() => {
+        processInstagramEmbeds();
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [stylingItems])
+
+  // 埋め込みコンポーネントが表示された後の処理
+  useEffect(() => {
+    const hasEmbedCode = stylingItems.some(item => item.embedCode && isValidEmbedCode(item.embedCode));
+    if (hasEmbedCode) {
+      // DOMが更新された後にInstagram埋め込みを処理
+      const timer = setTimeout(() => {
+        processInstagramEmbeds();
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [stylingItems])
 
   const fetchStylingItems = async () => {
     try {

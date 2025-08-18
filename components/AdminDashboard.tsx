@@ -1,9 +1,9 @@
 'use client'
 
 import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import AdminItemForm from './AdminItemForm'
-import { extractImageUrlFromEmbedCode, isValidEmbedCode } from '@/utils/instagramUtils'
+import { extractImageUrlFromEmbedCode, isValidEmbedCode, processInstagramEmbeds } from '@/utils/instagramUtils'
 
 interface Item {
   id: string
@@ -32,6 +32,31 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   useEffect(() => {
     fetchItems()
   }, [])
+
+  // Instagram埋め込みコンポーネントの処理
+  useEffect(() => {
+    if (items.length > 0) {
+      // アイテムが読み込まれた後に少し遅延してからInstagram埋め込みを処理
+      const timer = setTimeout(() => {
+        processInstagramEmbeds();
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [items])
+
+  // 埋め込みコンポーネントが表示された後の処理
+  useEffect(() => {
+    const hasEmbedCode = items.some(item => item.embedCode && isValidEmbedCode(item.embedCode));
+    if (hasEmbedCode) {
+      // DOMが更新された後にInstagram埋め込みを処理
+      const timer = setTimeout(() => {
+        processInstagramEmbeds();
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [items])
 
   const fetchItems = async () => {
     try {
