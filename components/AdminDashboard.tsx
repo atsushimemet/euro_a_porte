@@ -1,9 +1,19 @@
 'use client'
 
-import React from 'react'
 import { Edit, LogOut, Plus, Star, Trash2 } from 'lucide-react'
-import { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminItemForm from './AdminItemForm'
+
+// Instagram埋め込みの型定義
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds: {
+        process: () => void;
+      };
+    };
+  }
+}
 
 
 interface Item {
@@ -13,6 +23,7 @@ interface Item {
   history?: string
   imageUrl: string
   stylingUrl?: string
+  embedCode?: string
 
   category: string
   tags: string[]
@@ -35,6 +46,16 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   }, [])
 
   // Instagram埋め込みコンポーネントの処理
+  const processInstagramEmbeds = () => {
+    if (typeof window !== 'undefined' && window.instgrm) {
+      window.instgrm.Embeds.process();
+    }
+  };
+
+  const isValidEmbedCode = (embedCode: string) => {
+    return embedCode && embedCode.includes('instagram.com');
+  };
+
   useEffect(() => {
     if (items.length > 0) {
       // アイテムが読み込まれた後に少し遅延してからInstagram埋め込みを処理

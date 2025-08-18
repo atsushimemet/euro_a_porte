@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Received body:', body)
     
-    const { name, description, history, imageUrl, stylingUrl, category, tags } = body
+    const { name, description, history, imageUrl, stylingUrl, embedCode, category, tags } = body
 
     // 必須フィールドの検証
     if (!name || !description || !imageUrl || !category) {
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
           history: history || null,
           imageUrl,
           stylingUrl: stylingUrl || null,
+          embedCode: embedCode || null,
           category,
           tags: tags || []
         }

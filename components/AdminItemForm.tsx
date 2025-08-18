@@ -10,6 +10,7 @@ interface Item {
   history?: string
   imageUrl: string
   stylingUrl?: string
+  embedCode?: string
 
   category: string
   tags: string[]
@@ -28,6 +29,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
     history: '',
     imageUrl: '',
     stylingUrl: '',
+    embedCode: '',
 
     category: '',
     tags: [] as string[]
@@ -47,6 +49,7 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
         history: item.history || '',
         imageUrl: item.imageUrl,
         stylingUrl: item.stylingUrl || '',
+        embedCode: item.embedCode || '',
   
         category: item.category,
         tags: item.tags
@@ -195,8 +198,16 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
                 value={formData.imageUrl}
                 onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                 className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+                placeholder="https://example.com/image.jpg"
                 required
               />
+              {formData.imageUrl.includes('instagram.com') && (
+                <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800">
+                    <strong>注意:</strong> InstagramのURLが検出されました。実際の画像URL（.jpg, .png, .webpなど）を入力してください。
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Styling URL */}
@@ -210,8 +221,27 @@ export default function AdminItemForm({ item, onSave, onCancel }: AdminItemFormP
                 value={formData.stylingUrl}
                 onChange={(e) => setFormData({ ...formData, stylingUrl: e.target.value })}
                 className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+                placeholder="https://example.com/styling.jpg"
               />
             </div>
+          </div>
+
+          {/* Instagram Embed Code */}
+          <div>
+            <label htmlFor="embedCode" className="block text-sm font-medium text-primary-700 mb-2">
+              Instagram埋め込みコード（オプション）
+            </label>
+            <textarea
+              id="embedCode"
+              value={formData.embedCode}
+              onChange={(e) => setFormData({ ...formData, embedCode: e.target.value })}
+              rows={3}
+              className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+              placeholder="Instagramの埋め込みコードを貼り付けてください"
+            />
+            <p className="mt-1 text-sm text-primary-600">
+              Instagram投稿の「埋め込み」から取得したコードを貼り付けてください
+            </p>
           </div>
 
 
