@@ -27,9 +27,9 @@ export function extractImageUrlFromEmbedCode(embedCode: string): string | null {
 // Instagram投稿のプレースホルダー画像URLを生成する関数
 export function getInstagramPlaceholderUrl(postId: string | null): string {
   if (!postId) {
-    return 'https://via.placeholder.com/300x300/f0f0f0/999999?text=Instagram+Post';
+    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjE1MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTk5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbnN0YWdyYW0gUG9zdDwvdGV4dD48L3N2Zz4=';
   }
-  return `https://via.placeholder.com/300x300/f0f0f0/999999?text=Instagram+${postId}`;
+  return `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZjBmMCIvPjx0ZXh0IHg9IjE1MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTk5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbnN0YWdyYW0g${btoa(postId)}PC90ZXh0Pjwvc3ZnPg==`;
 }
 
 // 埋め込みコードから投稿IDを抽出する関数
