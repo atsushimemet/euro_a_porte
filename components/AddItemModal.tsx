@@ -1,7 +1,7 @@
 'use client'
 
 import { Plus, Upload, X, X as XIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ImageWithFallback from './ImageWithFallback'
 
 interface AddItemModalProps {
@@ -14,6 +14,8 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
     name: '',
     description: '',
     imageUrl: '',
+    mainCategory: '',
+    subCategory: '',
     category: '',
     tags: [] as string[],
     favoritePoints: '',
@@ -22,9 +24,35 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
   const [newTag, setNewTag] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const categories = [
-    'トップス', 'アウター', 'ボトムス', 'ワンピース', 'アクセサリー', 'シューズ', 'バッグ'
-  ]
+  const categoryStructure = {
+    'ワーク': [
+      'フレンチワークジャケット',
+      'ハンティングジャケット',
+      'ビヨード',
+      'マキニョンコート',
+      'グランパシャツ',
+      'ワークパンツ'
+    ],
+    'ミリタリー': [
+      'フランス',
+      'イギリス',
+      'スウェーデン',
+      'ソ連'
+    ]
+  }
+
+  const mainCategories = Object.keys(categoryStructure)
+  const getSubCategories = (mainCategory: string) => categoryStructure[mainCategory as keyof typeof categoryStructure] || []
+
+  // Update category when main/sub categories change
+  useEffect(() => {
+    if (formData.mainCategory && formData.subCategory) {
+      setFormData(prev => ({
+        ...prev,
+        category: `${prev.mainCategory} - ${prev.subCategory}`
+      }))
+    }
+  }, [formData.mainCategory, formData.subCategory])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -135,25 +163,61 @@ export default function AddItemModal({ onClose, onAdd }: AddItemModalProps) {
             </div>
 
             {/* カテゴリ */}
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-primary-700 mb-2">
-                カテゴリ <span className="text-red-500">*</span>
-              </label>
-              <select
-                id="category"
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                required
-                className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
-              >
-                <option value="">カテゴリを選択</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="mainCategory" className="block text-sm font-medium text-primary-700 mb-2">
+                  大分類 <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="mainCategory"
+                  value={formData.mainCategory}
+                  onChange={(e) => {
+                    setFormData({ 
+                      ...formData, 
+                      mainCategory: e.target.value,
+                      subCategory: '' // Reset subcategory when main category changes
+                    })
+                  }}
+                  required
+                  className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+                >
+                  <option value="">大分類を選択</option>
+                  {mainCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="subCategory" className="block text-sm font-medium text-primary-700 mb-2">
+                  小分類 <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="subCategory"
+                  value={formData.subCategory}
+                  onChange={(e) => setFormData({ ...formData, subCategory: e.target.value })}
+                  required
+                  disabled={!formData.mainCategory}
+                  className="w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent disabled:bg-gray-100"
+                >
+                  <option value="">小分類を選択</option>
+                  {getSubCategories(formData.mainCategory).map((subCategory) => (
+                    <option key={subCategory} value={subCategory}>
+                      {subCategory}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
+
+            {/* Display combined category for reference */}
+            {formData.category && (
+              <div className="text-sm text-primary-600">
+                選択されたカテゴリ: <span className="font-medium">{formData.category}</span>
+              </div>
+            )}
 
             {/* タグ */}
             <div>

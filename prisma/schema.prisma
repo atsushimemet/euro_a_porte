@@ -35,8 +35,10 @@ model Item {
   stylingUrl  String?
   embedCode   String?
 
-  category    String
-  tags        String[]
+  mainCategory String  // "ワーク" or "ミリタリー"
+  subCategory  String  // Specific subcategory within main category
+  category     String  // For backward compatibility, will be "mainCategory - subCategory"
+  tags         String[]
   isStylingExample Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -48,8 +50,10 @@ model ClosetItem {
   name        String
   description String?
   imageUrl    String
-  category    String
-  tags        String[]
+  mainCategory String  // "ワーク" or "ミリタリー"
+  subCategory  String  // Specific subcategory within main category
+  category     String  // For backward compatibility, will be "mainCategory - subCategory"
+  tags         String[]
   favoritePoints String? // お気に入りポイント
   isPublic    Boolean  @default(true)
   createdAt   DateTime @default(now())

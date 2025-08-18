@@ -25,6 +25,8 @@ interface Item {
   stylingUrl?: string
   embedCode?: string
 
+  mainCategory: string
+  subCategory: string
   category: string
   tags: string[]
   isStylingExample?: boolean

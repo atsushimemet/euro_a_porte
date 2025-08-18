@@ -53,7 +53,10 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    const { name, description, history, imageUrl, stylingUrl, embedCode, category, tags, isStylingExample } = body
+    const { name, description, history, imageUrl, stylingUrl, embedCode, mainCategory, subCategory, category, tags, isStylingExample } = body
+
+    // Generate category if not provided but mainCategory and subCategory are available
+    const finalCategory = category || (mainCategory && subCategory ? `${mainCategory} - ${subCategory}` : category)
 
           const item = await prisma.item.update({
         where: { id: params.id },
@@ -64,7 +67,9 @@ export async function PUT(
           imageUrl,
           stylingUrl,
           embedCode,
-          category,
+          mainCategory,
+          subCategory,
+          category: finalCategory,
           tags,
           isStylingExample
         }

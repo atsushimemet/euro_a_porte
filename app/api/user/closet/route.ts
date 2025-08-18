@@ -43,15 +43,18 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, imageUrl, category, tags } = body
+    const { name, description, imageUrl, mainCategory, subCategory, category, tags, favoritePoints, isPublic } = body
 
     // バリデーション
-    if (!name || !imageUrl || !category) {
+    if (!name || !imageUrl || !mainCategory || !subCategory) {
       return NextResponse.json(
-        { error: '必須フィールドが不足しています' },
+        { error: '必須フィールドが不足しています (name, imageUrl, mainCategory, subCategory)' },
         { status: 400 }
       )
     }
+
+    // Generate category if not provided
+    const finalCategory = category || `${mainCategory} - ${subCategory}`
 
     const item = await prisma.closetItem.create({
       data: {
@@ -59,8 +62,12 @@ export async function POST(request: NextRequest) {
         name,
         description: description || null,
         imageUrl,
-        category,
-        tags: tags || []
+        mainCategory,
+        subCategory,
+        category: finalCategory,
+        tags: tags || [],
+        favoritePoints: favoritePoints || null,
+        isPublic: isPublic !== undefined ? isPublic : true
       }
     })
 
